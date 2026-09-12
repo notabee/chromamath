@@ -1,0 +1,393 @@
+[
+  {
+    "id": "fourier-transform",
+    "title": "Discrete Fourier Transform (DFT)",
+    "normalizedLatex": "X_k = \\frac{1}{N} \\sum_{n=0}^{N-1} x_n e^{-i 2\\pi k \\frac{n}{N}}",
+    "colorizedLatex": "{\\color{#8B5CF6} X_k} = {\\color{#EC4899} \\frac{1}{N} \\sum_{n=0}^{N-1}} {\\color{#3B82F6} x_n} {\\color{#EF4444} e} {\\color{#F59E0B} ^{-i 2\\pi k \\frac{n}{N}}}",
+    "narrativeSentence": "To find the energy at a particular frequency, spin your signal around a circle at that frequency, and average a bunch of points along that path.",
+    "components": [
+      {
+        "id": "c1",
+        "latexChunk": "X_k",
+        "plainPhrase": "the energy at a particular frequency",
+        "technicalName": "Frequency Bin Output",
+        "roleIntuition": "Recipe ingredient strength",
+        "paletteIndex": 0
+      },
+      {
+        "id": "c2",
+        "latexChunk": "e",
+        "plainPhrase": "spin",
+        "technicalName": "Complex Exponential Base",
+        "roleIntuition": "The engine of rotation",
+        "paletteIndex": 3
+      },
+      {
+        "id": "c3",
+        "latexChunk": "x_n",
+        "plainPhrase": "your signal",
+        "technicalName": "Discrete Time-Domain Input",
+        "roleIntuition": "The raw audio / soundwave points",
+        "paletteIndex": 1
+      },
+      {
+        "id": "c4",
+        "latexChunk": "^{-i 2\\pi k \\frac{n}{N}}",
+        "plainPhrase": "around a circle at that frequency",
+        "technicalName": "Circular Frequency Phase",
+        "roleIntuition": "Spinning angle speed",
+        "paletteIndex": 4
+      },
+      {
+        "id": "c5",
+        "latexChunk": "\\frac{1}{N} \\sum_{n=0}^{N-1}",
+        "plainPhrase": "average a bunch of points along that path",
+        "technicalName": "Normalized Finite Sum",
+        "roleIntuition": "Finding the center of mass",
+        "paletteIndex": 5
+      }
+    ],
+    "adept": {
+      "analogy": "Passing a fruit smoothie through a prism to separate it back into the individual strawberries, bananas, and yogurt that created it.",
+      "diagramConcept": "Wrap the time-domain signal around a circle like a spiral. When the wrapping frequency matches the signal's rhythm, the center of mass drifts away from zero!",
+      "concreteExample": "Analyzing a chord played on a piano to detect that it contains notes C (261Hz), E (329Hz), and G (392Hz).",
+      "plainDefinition": "A mathematical prism that breaks a complex combined wave into its individual pure frequencies and their strengths.",
+      "technicalDefinition": "A linear transformation mapping a sequence of N complex numbers from the discrete-time domain to the discrete-frequency domain."
+    },
+    "source": "library"
+  },
+  {
+    "id": "euler-continuous-growth",
+    "title": "Euler's Constant e (Base of Continuous Growth)",
+    "normalizedLatex": "e = \\lim_{n \\to \\infty} \\left( 1 + \\frac{1}{n} \\right)^{1 \\cdot n}",
+    "colorizedLatex": "{\\color{#8B5CF6} e} = {\\color{#F59E0B} \\lim_{n \\to \\infty}} \\left( {\\color{#10B981} 1} + {\\color{#EF4444} \\frac{1}}{{\\color{#EC4899} n}} \\right)^{{\\color{#3B82F6} 1} \\cdot {\\color{#EC4899} n}}",
+    "narrativeSentence": "The base for continuous growth is the unit quantity earning unit interest for unit time, compounded as fast as possible.",
+    "components": [
+      {
+        "id": "c1",
+        "latexChunk": "e",
+        "plainPhrase": "The base for continuous growth",
+        "technicalName": "Euler's Number (~2.71828)",
+        "roleIntuition": "Maximum growth ceiling",
+        "paletteIndex": 0
+      },
+      {
+        "id": "c2",
+        "latexChunk": "1",
+        "plainPhrase": "the unit quantity",
+        "technicalName": "Principal Amount",
+        "roleIntuition": "Your starting seed",
+        "paletteIndex": 2
+      },
+      {
+        "id": "c3",
+        "latexChunk": "\\frac{1}{\\dots}",
+        "plainPhrase": "earning unit interest",
+        "technicalName": "100% Annual Nominal Rate",
+        "roleIntuition": "Base return rate",
+        "paletteIndex": 3
+      },
+      {
+        "id": "c4",
+        "latexChunk": "^{1 \\cdot \\dots}",
+        "plainPhrase": "for unit time",
+        "technicalName": "Unit Duration (1 Year)",
+        "roleIntuition": "Measurement window",
+        "paletteIndex": 1
+      },
+      {
+        "id": "c5",
+        "latexChunk": "n",
+        "plainPhrase": "compounded",
+        "technicalName": "Compounding Periods",
+        "roleIntuition": "Frequency of reinvestment",
+        "paletteIndex": 5
+      },
+      {
+        "id": "c6",
+        "latexChunk": "\\lim_{n \\to \\infty}",
+        "plainPhrase": "as fast as possible",
+        "technicalName": "Infinite Limit",
+        "roleIntuition": "Seamless continuous time",
+        "paletteIndex": 4
+      }
+    ],
+    "adept": {
+      "analogy": "A snowball rolling down a snowy hill. As it rolls, the newly accumulated snow immediately starts gathering even more snow without waiting for calendar days.",
+      "diagramConcept": "Graph compounding: 1 payout gives 2.0x, monthly gives 2.61x, daily gives 2.7145x. As frequency approaches infinity, it smoothly converges to 2.71828...",
+      "concreteExample": "$1 invested at 100% nominal annual return continuously compounded results in $2.71828 at year end.",
+      "plainDefinition": "The universal speed limit of growth when interest is instantly reinvested every microsecond.",
+      "technicalDefinition": "The unique real base such that the derivative of the exponential function f(x) = e^x is equal to f(x) itself."
+    },
+    "source": "library"
+  },
+  {
+    "id": "transformer-attention",
+    "title": "Scaled Dot-Product Attention (Transformers / arXiv)",
+    "normalizedLatex": "\\text{Attention}(Q, K, V) = \\text{softmax}\\left( \\frac{Q K^T}{\\sqrt{d_k}} \\right) V",
+    "colorizedLatex": "{\\color{#8B5CF6} \\text{Attention}(Q, K, V)} = {\\color{#EF4444} \\text{softmax}}\\left( \\frac{{\\color{#3B82F6} Q} {\\color{#10B981} K^T}}{{\\color{#F59E0B} \\sqrt{d_k}}} \\right) {\\color{#EC4899} V}",
+    "narrativeSentence": "To calculate contextual relevance, compare queries against keys, scale down to prevent extreme values, convert similarity into probability weights, and blend the values accordingly.",
+    "components": [
+      {
+        "id": "c1",
+        "latexChunk": "\\text{Attention}(Q, K, V)",
+        "plainPhrase": "To calculate contextual relevance",
+        "technicalName": "Attention Output Matrix",
+        "roleIntuition": "Context-aware token representation",
+        "paletteIndex": 0
+      },
+      {
+        "id": "c2",
+        "latexChunk": "Q K^T",
+        "plainPhrase": "compare queries against keys",
+        "technicalName": "Query-Key Dot Product",
+        "roleIntuition": "Measuring relevance match",
+        "paletteIndex": 1
+      },
+      {
+        "id": "c3",
+        "latexChunk": "\\frac{1}{\\sqrt{d_k}}",
+        "plainPhrase": "scale down to prevent extreme values",
+        "technicalName": "Scaling Factor",
+        "roleIntuition": "Keeps dot-product variance stable",
+        "paletteIndex": 4
+      },
+      {
+        "id": "c4",
+        "latexChunk": "\\text{softmax}",
+        "plainPhrase": "convert similarity into probability weights",
+        "technicalName": "Row-wise Softmax",
+        "roleIntuition": "Normalized focus percentages",
+        "paletteIndex": 3
+      },
+      {
+        "id": "c5",
+        "latexChunk": "V",
+        "plainPhrase": "blend the values accordingly",
+        "technicalName": "Value Matrix",
+        "roleIntuition": "The actual information payload",
+        "paletteIndex": 5
+      }
+    ],
+    "adept": {
+      "analogy": "A library search: your Query (what you seek) is matched against book Title/Catalog cards (Keys). The best matches determine which Book Chapters (Values) you read.",
+      "diagramConcept": "A matrix of words on both axes. In 'The animal didn't cross the street because it was tired', 'it' shines brightly on 'animal'.",
+      "concreteExample": "Resolving pronouns in sentences or paying attention to preceding code syntax in language models.",
+      "plainDefinition": "A routing mechanism allowing each word in a sequence to selectively absorb information from all other words based on relevance.",
+      "technicalDefinition": "An attention function mapping a query and a set of key-value pairs to an output computed as a weighted sum of the values, where weights are determined by scaled dot-product similarity."
+    },
+    "source": "library"
+  },
+  {
+    "id": "bayes-theorem",
+    "title": "Bayes' Theorem",
+    "normalizedLatex": "P(A|B) = \\frac{P(B|A) \\cdot P(A)}{P(B)}",
+    "colorizedLatex": "{\\color{#8B5CF6} P(A|B)} = \\frac{{\\color{#EF4444} P(B|A)} \\cdot {\\color{#3B82F6} P(A)}}{{\\color{#10B981} P(B)}}",
+    "narrativeSentence": "The updated belief after seeing evidence is your prior belief multiplied by the evidence likelihood, diluted by total evidence occurrence.",
+    "components": [
+      {
+        "id": "c1",
+        "latexChunk": "P(A|B)",
+        "plainPhrase": "The updated belief after seeing evidence",
+        "technicalName": "Posterior Probability",
+        "roleIntuition": "What you should believe now",
+        "paletteIndex": 0
+      },
+      {
+        "id": "c2",
+        "latexChunk": "P(A)",
+        "plainPhrase": "your prior belief",
+        "technicalName": "Prior Probability",
+        "roleIntuition": "What you believed before the test",
+        "paletteIndex": 1
+      },
+      {
+        "id": "c3",
+        "latexChunk": "P(B|A)",
+        "plainPhrase": "multiplied by the evidence likelihood",
+        "technicalName": "Likelihood Function",
+        "roleIntuition": "How likely true positives are",
+        "paletteIndex": 3
+      },
+      {
+        "id": "c4",
+        "latexChunk": "P(B)",
+        "plainPhrase": "diluted by total evidence occurrence",
+        "technicalName": "Marginal Probability / Evidence",
+        "roleIntuition": "False positives + true positives",
+        "paletteIndex": 2
+      }
+    ],
+    "adept": {
+      "analogy": "A fire alarm sounding: Don't panic immediately; factor in both how often the alarm detects real fires and how often it sounds for burnt toast.",
+      "diagramConcept": "Two overlapping circles in a Venn diagram. P(A|B) zooms into circle B and asks what fraction of B belongs to A.",
+      "concreteExample": "If a rare disease affects 0.1% of people and a test is 99% accurate, a positive test still means only a ~9% chance of having the disease because false positives overwhelm true cases.",
+      "plainDefinition": "A mathematical rule for updating your confidence in an idea as new clues arrive.",
+      "technicalDefinition": "A theorem in probability theory describing the probability of an event based on prior knowledge of conditions related to the event."
+    },
+    "source": "library"
+  },
+  {
+    "id": "cross-entropy-loss",
+    "title": "Categorical Cross-Entropy Loss (ML / arXiv)",
+    "normalizedLatex": "\\mathcal{L} = - \\sum_{i} y_i \\log(\\hat{y}_i)",
+    "colorizedLatex": "{\\color{#8B5CF6} \\mathcal{L}} = {\\color{#EF4444} -} {\\color{#F59E0B} \\sum_{i}} {\\color{#10B981} y_i} {\\color{#3B82F6} \\log(\\hat{y}_i)}",
+    "narrativeSentence": "The penalty score sums the surprise of your model on the true answer, heavily punishing high confidence on wrong guesses.",
+    "components": [
+      {
+        "id": "c1",
+        "latexChunk": "\\mathcal{L}",
+        "plainPhrase": "The penalty score",
+        "technicalName": "Loss Value",
+        "roleIntuition": "How bad the mistake was",
+        "paletteIndex": 0
+      },
+      {
+        "id": "c2",
+        "latexChunk": "y_i",
+        "plainPhrase": "on the true answer",
+        "technicalName": "Ground Truth One-Hot Label",
+        "roleIntuition": "Filters out all non-target classes",
+        "paletteIndex": 2
+      },
+      {
+        "id": "c3",
+        "latexChunk": "\\log(\\hat{y}_i)",
+        "plainPhrase": "the surprise of your model",
+        "technicalName": "Log Predicted Probability",
+        "roleIntuition": "Information theoretic surprise",
+        "paletteIndex": 1
+      },
+      {
+        "id": "c4",
+        "latexChunk": "-",
+        "plainPhrase": "heavily punishing high confidence on wrong guesses",
+        "technicalName": "Negative Inversion",
+        "roleIntuition": "Turns negative log into positive loss",
+        "paletteIndex": 3
+      },
+      {
+        "id": "c5",
+        "latexChunk": "\\sum_i",
+        "plainPhrase": "sums",
+        "technicalName": "Class Summation",
+        "roleIntuition": "Totals over all classes",
+        "paletteIndex": 4
+      }
+    ],
+    "adept": {
+      "analogy": "A teacher grading a quiz: saying 'I am 99% sure Paris is in Italy' gets penalised far harsher than saying 'I am unsure, 50-50'.",
+      "diagramConcept": "The -log(p) curve shoots up to infinity as probability approaches 0, creating a steep cliff for overconfident wrong answers.",
+      "concreteExample": "Training an image classifier on dogs and cats; if the image is a dog and the model says 99% cat, loss explodes to 4.6.",
+      "plainDefinition": "A score measuring the difference between two probability distributions: reality vs the model's beliefs.",
+      "technicalDefinition": "The negative log-likelihood of the true class under the model's predicted probability distribution."
+    },
+    "source": "library"
+  },
+  {
+    "id": "indexcache-multidistill",
+    "title": "IndexCache Multi-Layer Distillation (arXiv:2603.12201)",
+    "normalizedLatex": "\\mathcal{L}^{\\mathrm{I}}_{\\mathrm{multi}} = \\sum_{j=0}^{m} \\frac{1}{m+1} \\sum_{t} D_{\\mathrm{KL}}\\left(\\mathbf{p}^{(\\ell+j)}_{t} \\,\\big\\|\\, \\mathbf{q}^{(\\ell)}_{t}\\right)",
+    "colorizedLatex": "{\\color{#8B5CF6} \\mathcal{L}^{\\mathrm{I}}_{\\mathrm{multi}}} = {\\color{#F59E0B} \\sum_{j=0}^{m} \\frac{1}{m+1}} {\\color{#3B82F6} \\sum_{t}} {\\color{#EF4444} D_{\\mathrm{KL}}} \\left( {\\color{#10B981} \\mathbf{p}^{(\\ell+j)}_{t}} \\,\\big\\|\\, {\\color{#EC4899} \\mathbf{q}^{(\\ell)}_{t}} \\right)",
+    "narrativeSentence": "To train a shared attention indexer across multiple layers, average the divergence penalties between each served layer's true attention and the indexer's predicted token distribution.",
+    "components": [
+      {
+        "id": "c1",
+        "latexChunk": "\\mathcal{L}^{\\mathrm{I}}_{\\mathrm{multi}}",
+        "plainPhrase": "To train a shared attention indexer across multiple layers",
+        "technicalName": "Multi-Layer Indexer Distillation Loss",
+        "roleIntuition": "The composite training objective for cross-layer index reuse",
+        "paletteIndex": 0
+      },
+      {
+        "id": "c2",
+        "latexChunk": "\\sum_{j=0}^{m} \\frac{1}{m+1}",
+        "plainPhrase": "average",
+        "technicalName": "Mean Over Served Layers",
+        "roleIntuition": "Averaging across the m subsequent shared layers",
+        "paletteIndex": 4
+      },
+      {
+        "id": "c3",
+        "latexChunk": "D_{\\mathrm{KL}}",
+        "plainPhrase": "the divergence penalties",
+        "technicalName": "Kullback-Leibler Divergence",
+        "roleIntuition": "Measures statistical discrepancy in token selection",
+        "paletteIndex": 3
+      },
+      {
+        "id": "c4",
+        "latexChunk": "\\mathbf{p}^{(\\ell+j)}_{t}",
+        "plainPhrase": "between each served layer's true attention",
+        "technicalName": "Target Layer True Attention Distribution",
+        "roleIntuition": "The actual full attention weights of served layer ℓ+j",
+        "paletteIndex": 2
+      },
+      {
+        "id": "c5",
+        "latexChunk": "\\mathbf{q}^{(\\ell)}_{t}",
+        "plainPhrase": "and the indexer's predicted token distribution",
+        "technicalName": "Full Layer Indexer Prediction",
+        "roleIntuition": "The top-k candidate distribution proposed by layer ℓ",
+        "paletteIndex": 5
+      }
+    ],
+    "adept": {
+      "analogy": "A school chef planning a single lunch menu (the shared indexer q) that simultaneously satisfies the diverse dietary preferences of m different classrooms (p).",
+      "diagramConcept": "Pulling toward the centroid: instead of pointing the indexer toward just one layer's target vector, gradients pull the indexer toward the geometric center-of-mass of all m served layers.",
+      "concreteExample": "Layer 4 is a Full layer whose indexer serves layers 5, 6, and 7. The loss measures how well layer 4's top-k tokens satisfy the attention needs of all 4 layers together.",
+      "plainDefinition": "A training loss that trains a sparse attention indexer to choose tokens that are simultaneously useful for several subsequent transformer layers.",
+      "technicalDefinition": "The sum of KL divergences between the true attention distributions of m layers and the indexer's output distribution, mathematically equivalent to distilling against the averaged target centroid."
+    },
+    "source": "library"
+  },
+  {
+    "id": "indexcache-avgdistill",
+    "title": "IndexCache Centroid Distillation (arXiv:2603.12201 Eq. 2)",
+    "normalizedLatex": "\\mathcal{L}^{\\mathrm{I}}_{\\mathrm{avg}} = \\sum_{t} D_{\\mathrm{KL}}\\left(\\bar{\\mathbf{p}}_{t} \\,\\big\\|\\, \\mathbf{q}^{(\\ell)}_{t}\\right)",
+    "colorizedLatex": "{\\color{#8B5CF6} \\mathcal{L}^{\\mathrm{I}}_{\\mathrm{avg}}} = {\\color{#3B82F6} \\sum_{t}} {\\color{#EF4444} D_{\\mathrm{KL}}} \\left( {\\color{#10B981} \\bar{\\mathbf{p}}_{t}} \\,\\big\\|\\, {\\color{#EC4899} \\mathbf{q}^{(\\ell)}_{t}} \\right)",
+    "narrativeSentence": "The single-target loss distills the full layer's indexer directly against the averaged attention centroid of all served layers.",
+    "components": [
+      {
+        "id": "c1",
+        "latexChunk": "\\mathcal{L}^{\\mathrm{I}}_{\\mathrm{avg}}",
+        "plainPhrase": "The single-target loss",
+        "technicalName": "Centroid Target Distillation Loss",
+        "roleIntuition": "The consolidated single-target loss objective",
+        "paletteIndex": 0
+      },
+      {
+        "id": "c2",
+        "latexChunk": "\\mathbf{q}^{(\\ell)}_{t}",
+        "plainPhrase": "distills the full layer's indexer",
+        "technicalName": "Current Indexer Distribution",
+        "roleIntuition": "The student indexer network being trained",
+        "paletteIndex": 5
+      },
+      {
+        "id": "c3",
+        "latexChunk": "D_{\\mathrm{KL}}",
+        "plainPhrase": "directly against",
+        "technicalName": "Kullback-Leibler Divergence",
+        "roleIntuition": "Measures distribution alignment",
+        "paletteIndex": 3
+      },
+      {
+        "id": "c4",
+        "latexChunk": "\\bar{\\mathbf{p}}_{t}",
+        "plainPhrase": "the averaged attention centroid of all served layers",
+        "technicalName": "Averaged Attention Centroid Target",
+        "roleIntuition": "The mean attention distribution across all served layers",
+        "paletteIndex": 2
+      }
+    ],
+    "adept": {
+      "analogy": "Instead of quizzing a student on 4 different test versions, combining the 4 versions into a single averaged master exam.",
+      "diagramConcept": "Averaged vector: 4 arrows pointing in similar directions are replaced by one central composite arrow.",
+      "concreteExample": "If layers 4, 5, 6 give token #42 attention weights 0.4, 0.5, 0.6, the centroid target is 0.5.",
+      "plainDefinition": "An equivalent formulation proving that multi-layer training simply points the indexer toward the average attention pattern of all served layers.",
+      "technicalDefinition": "The KL divergence between the arithmetic mean of target attention distributions and the predicted indexer distribution, yielding identical gradients to sum of individual KLs."
+    },
+    "source": "library"
+  }
+]
