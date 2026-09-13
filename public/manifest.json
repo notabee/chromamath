@@ -5,6 +5,7 @@
   "description": "Deconstructs mathematical equations on arXiv and PDFs into intuitive, color-coordinated cognitive maps.",
   "icons": {
     "16": "icons/icon-16.png",
+    "32": "icons/icon-32.png",
     "48": "icons/icon-48.png",
     "128": "icons/icon-128.png"
   },
@@ -12,6 +13,7 @@
     "default_title": "Open ChromaMath",
     "default_icon": {
       "16": "icons/icon-16.png",
+      "32": "icons/icon-32.png",
       "48": "icons/icon-48.png",
       "128": "icons/icon-128.png"
     }
@@ -59,5 +61,15 @@
       },
       "description": "Snip equation from paper"
     }
-  }
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "icons/*"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
+    }
+  ]
 }

@@ -26,21 +26,7 @@ export const Header: React.FC<HeaderProps> = ({
   };
 
   return (
-    <header className="px-4 py-3 bg-[#f5f5f7]/95 backdrop-blur border-b border-dotted border-neutral-300 flex items-center justify-between sticky top-0 z-30">
-      <div className="flex items-center gap-2.5">
-        {/* Minimal Avatar Circle */}
-        <div className="w-8 h-8 rounded-full border-2 border-black bg-white flex items-center justify-center font-bold text-xs text-black shadow-sm">
-          CM
-        </div>
-        
-        {/* Solid Black Capsule Pill Header */}
-        <div className="bg-black text-white px-3.5 py-1 rounded-full text-xs font-bold tracking-wider uppercase flex items-center gap-1.5 shadow-sm">
-          <span>ChromaMath</span>
-          <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-neutral-800 text-neutral-300 font-semibold tracking-normal">
-            arXiv
-          </span>
-        </div>
-      </div>
+    <header className="px-4 py-2.5 bg-[#f5f5f7]/95 backdrop-blur border-b border-dotted border-neutral-300 flex items-center justify-end sticky top-0 z-30">
 
       <div className="flex items-center gap-1.5">
         {/* Browse Library */}

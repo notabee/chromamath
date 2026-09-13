@@ -1,11 +1,12 @@
 import { findInLibrary, deconstructWithGemini } from './gemini';
 import { ColorizedEquation, SnipCoordinates } from '../shared/types';
+import { ExtensionMessage } from '../shared/messages';
+import { STORAGE_KEYS } from '../shared/constants';
 
-// Configure Side Panel to open when clicking the extension icon
+// Configure Side Panel behavior and context menus
 chrome.runtime.onInstalled.addListener(() => {
-  chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true });
+  chrome.sidePanel?.setPanelBehavior({ openPanelOnActionClick: true })?.catch?.(() => {});
 
-  // Create context menu items
   chrome.contextMenus.create({
     id: 'chromamath-explain-selection',
     title: 'Explain with ChromaMath',
@@ -25,22 +26,26 @@ let activeEquation: ColorizedEquation | null = null;
 chrome.contextMenus.onClicked.addListener(async (info, tab) => {
   if (info.menuItemId === 'chromamath-explain-selection' && info.selectionText) {
     if (tab?.id) {
-      await chrome.sidePanel.open({ tabId: tab.id });
+      try {
+        await chrome.sidePanel.open({ tabId: tab.id });
+      } catch {
+        // Handled silently
+      }
       await processLatex(info.selectionText);
     }
   } else if (info.menuItemId === 'chromamath-snip-paper' && tab?.id) {
-    chrome.tabs.sendMessage(tab.id, { type: 'TRIGGER_SNIP_OVERLAY' });
+    chrome.tabs.sendMessage(tab.id, { type: 'TRIGGER_SNIP_OVERLAY' }).catch(() => {});
   }
 });
 
 /**
  * Ensures the offscreen document is ready for image cropping.
  */
-async function ensureOffscreenDocument() {
-  const existingContexts = await (chrome.runtime as any).getContexts({
+async function ensureOffscreenDocument(): Promise<void> {
+  const existingContexts = await (chrome.runtime as any).getContexts?.({
     contextTypes: ['OFFSCREEN_DOCUMENT'],
   });
-  if (existingContexts.length > 0) return;
+  if (existingContexts && existingContexts.length > 0) return;
 
   await chrome.offscreen.createDocument({
     url: 'offscreen.html',
@@ -53,7 +58,6 @@ async function ensureOffscreenDocument() {
  * Handles LaTeX processing: checks library first, then caches/calls AI.
  */
 async function processLatex(latex: string): Promise<ColorizedEquation> {
-  // Check library first
   const libraryMatch = findInLibrary(latex);
   if (libraryMatch) {
     activeEquation = libraryMatch;
@@ -61,9 +65,8 @@ async function processLatex(latex: string): Promise<ColorizedEquation> {
     return libraryMatch;
   }
 
-  // Retrieve user settings
-  const settings = await chrome.storage.sync.get(['apiKey']);
-  const apiKey = settings.apiKey || '';
+  const settings = await chrome.storage.sync.get([STORAGE_KEYS.API_KEY]);
+  const apiKey = settings[STORAGE_KEYS.API_KEY] || '';
 
   const result = await deconstructWithGemini({ latex }, apiKey);
   activeEquation = result;
@@ -75,8 +78,8 @@ async function processLatex(latex: string): Promise<ColorizedEquation> {
  * Handles image crop processing.
  */
 async function processImageCrop(croppedDataUrl: string): Promise<ColorizedEquation> {
-  const settings = await chrome.storage.sync.get(['apiKey']);
-  const apiKey = settings.apiKey || '';
+  const settings = await chrome.storage.sync.get([STORAGE_KEYS.API_KEY]);
+  const apiKey = settings[STORAGE_KEYS.API_KEY] || '';
 
   const result = await deconstructWithGemini({ imageBase64: croppedDataUrl }, apiKey);
   activeEquation = result;
@@ -84,26 +87,24 @@ async function processImageCrop(croppedDataUrl: string): Promise<ColorizedEquati
   return result;
 }
 
-function broadcastEquation(eq: ColorizedEquation) {
+function broadcastEquation(eq: ColorizedEquation): void {
   chrome.runtime.sendMessage({
     type: 'EQUATION_UPDATED',
     equation: eq
-  }).catch(() => {
-    // Side panel might not be open yet; that's fine, it will query on mount.
+  } as ExtensionMessage).catch(() => {
+    // Side panel might not be open yet; it will query on mount.
   });
 }
 
-// Runtime message listener
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+// Runtime message dispatcher
+chrome.runtime.onMessage.addListener((message: ExtensionMessage, sender, sendResponse) => {
   if (message.type === 'EXPLAIN_LATEX') {
     if (sender.tab?.id) {
-      chrome.sidePanel.open({ tabId: sender.tab.id }).catch((err) => {
-        console.log('Side panel open request:', err?.message);
-      });
+      chrome.sidePanel?.open?.({ tabId: sender.tab.id })?.catch?.(() => {});
     }
     processLatex(message.latex)
       .then(res => sendResponse({ success: true, equation: res }))
-      .catch(err => sendResponse({ success: false, error: err.message }));
+      .catch(err => sendResponse({ success: false, error: err?.message || 'Processing failed' }));
     return true; // Keep channel open for async response
   }
 
@@ -122,7 +123,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === 'START_SNIP') {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       if (tabs[0]?.id) {
-        chrome.tabs.sendMessage(tabs[0].id, { type: 'TRIGGER_SNIP_OVERLAY' });
+        chrome.tabs.sendMessage(tabs[0].id, { type: 'TRIGGER_SNIP_OVERLAY' } as ExtensionMessage).catch(() => {});
       }
     });
     return false;
@@ -133,27 +134,24 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     (async () => {
       try {
         await ensureOffscreenDocument();
-        // Capture tab screenshot
         const screenshotUrl = await chrome.tabs.captureVisibleTab({ format: 'png' });
 
-        // Send to offscreen document to crop
         chrome.runtime.sendMessage(
           {
             type: 'CROP_IMAGE',
             screenshotUrl,
             coords
-          },
+          } as ExtensionMessage,
           async (cropResponse) => {
             if (cropResponse?.success && cropResponse?.croppedDataUrl) {
               try {
-                // Open side panel if closed
                 if (sender.tab?.id) {
-                  await chrome.sidePanel.open({ tabId: sender.tab.id });
+                  await chrome.sidePanel.open({ tabId: sender.tab.id }).catch(() => {});
                 }
                 const eq = await processImageCrop(cropResponse.croppedDataUrl);
                 sendResponse({ success: true, equation: eq });
               } catch (err: any) {
-                sendResponse({ success: false, error: err.message });
+                sendResponse({ success: false, error: err?.message || 'Deconstruction failed' });
               }
             } else {
               sendResponse({ success: false, error: cropResponse?.error || 'Cropping failed' });
@@ -161,9 +159,11 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
           }
         );
       } catch (err: any) {
-        sendResponse({ success: false, error: err.message });
+        sendResponse({ success: false, error: err?.message || 'Capture failed' });
       }
     })();
     return true;
   }
+
+  return false;
 });

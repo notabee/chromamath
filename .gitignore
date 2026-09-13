@@ -32,3 +32,5 @@ pnpm-debug.log*
 
 # Temporary test artifacts
 test-artifacts/
+.tempmediaStorage/
+scratch/

@@ -16,11 +16,50 @@
       },
       {
         "id": "c2",
-        "latexChunk": "e",
-        "plainPhrase": "spin",
-        "technicalName": "Complex Exponential Base",
-        "roleIntuition": "The engine of rotation",
-        "paletteIndex": 3
+        "latexChunk": "e^{-i 2\\pi k \\frac{n}{N}}",
+        "plainPhrase": "spin your signal around a circle at that frequency",
+        "technicalName": "Circular Rotation Engine (Winding Factor)",
+        "roleIntuition": "Winds the signal around the complex unit circle",
+        "paletteIndex": 4,
+        "subBreakdown": {
+          "label": "Anatomy of the Winding Factor",
+          "narrativeSentence": "Spin around a circle at that frequency for each step of the journey",
+          "whyItExists": "Euler's formula e^{iθ} = cos(θ) + i·sin(θ) allows computing rotation in 2D space through compact algebraic multiplication instead of separate sine and cosine wave summations.",
+          "parts": [
+            {
+              "id": "sub-1",
+              "latexChunk": "e",
+              "plainPhrase": "spin",
+              "technicalName": "Euler's Number (~2.718)",
+              "roleIntuition": "Base of continuous growth and rotational dynamics",
+              "paletteIndex": 3
+            },
+            {
+              "id": "sub-2",
+              "latexChunk": "-i 2\\pi",
+              "plainPhrase": "around a circle",
+              "technicalName": "Clockwise 360° Complex Orbit",
+              "roleIntuition": "i turns numbers 90° into the complex plane; 2π gives a full 360° loop",
+              "paletteIndex": 4
+            },
+            {
+              "id": "sub-3",
+              "latexChunk": "k",
+              "plainPhrase": "at that frequency",
+              "technicalName": "Frequency Index",
+              "roleIntuition": "How many full loops to wind per cycle",
+              "paletteIndex": 2
+            },
+            {
+              "id": "sub-4",
+              "latexChunk": "\\frac{n}{N}",
+              "plainPhrase": "for each step of the journey",
+              "technicalName": "Normalized Time Step",
+              "roleIntuition": "Current sample point n out of total sequence length N",
+              "paletteIndex": 0
+            }
+          ]
+        }
       },
       {
         "id": "c3",
@@ -32,19 +71,34 @@
       },
       {
         "id": "c4",
-        "latexChunk": "^{-i 2\\pi k \\frac{n}{N}}",
-        "plainPhrase": "around a circle at that frequency",
-        "technicalName": "Circular Frequency Phase",
-        "roleIntuition": "Spinning angle speed",
-        "paletteIndex": 4
-      },
-      {
-        "id": "c5",
         "latexChunk": "\\frac{1}{N} \\sum_{n=0}^{N-1}",
         "plainPhrase": "average a bunch of points along that path",
         "technicalName": "Normalized Finite Sum",
         "roleIntuition": "Finding the center of mass",
-        "paletteIndex": 5
+        "paletteIndex": 5,
+        "subBreakdown": {
+          "label": "Anatomy of the Averaged Sum",
+          "narrativeSentence": "Accumulate all points along the path and divide by N",
+          "whyItExists": "If the winding frequency matches the signal, the points cluster together off-center; dividing by N computes the average center of mass.",
+          "parts": [
+            {
+              "id": "sub-5",
+              "latexChunk": "\\sum_{n=0}^{N-1}",
+              "plainPhrase": "accumulate all points",
+              "technicalName": "Summation across time window",
+              "roleIntuition": "Loops through every discrete time sample from 0 to N-1",
+              "paletteIndex": 5
+            },
+            {
+              "id": "sub-6",
+              "latexChunk": "\\frac{1}{N}",
+              "plainPhrase": "divide by total count",
+              "technicalName": "Normalization Factor",
+              "roleIntuition": "Computes the true average center of gravity",
+              "paletteIndex": 0
+            }
+          ]
+        }
       }
     ],
     "adept": {
@@ -142,7 +196,30 @@
         "plainPhrase": "compare queries against keys",
         "technicalName": "Query-Key Dot Product",
         "roleIntuition": "Measuring relevance match",
-        "paletteIndex": 1
+        "paletteIndex": 1,
+        "subBreakdown": {
+          "label": "Anatomy of the Dot-Product Match",
+          "narrativeSentence": "Multiply search query vectors by transposed key catalog vectors",
+          "whyItExists": "Taking the dot product between high-dimensional embeddings computes cosine alignment: parallel vectors get high positive scores, orthogonal vectors get 0.",
+          "parts": [
+            {
+              "id": "sub-q",
+              "latexChunk": "Q",
+              "plainPhrase": "search queries",
+              "technicalName": "Query Matrix (B × L × d_k)",
+              "roleIntuition": "What each token is looking for",
+              "paletteIndex": 1
+            },
+            {
+              "id": "sub-k",
+              "latexChunk": "K^T",
+              "plainPhrase": "transposed keys",
+              "technicalName": "Key Matrix Transposed (B × d_k × L)",
+              "roleIntuition": "What each token has to offer (flipped for matrix multiplication)",
+              "paletteIndex": 2
+            }
+          ]
+        }
       },
       {
         "id": "c3",
@@ -150,7 +227,30 @@
         "plainPhrase": "scale down to prevent extreme values",
         "technicalName": "Scaling Factor",
         "roleIntuition": "Keeps dot-product variance stable",
-        "paletteIndex": 4
+        "paletteIndex": 4,
+        "subBreakdown": {
+          "label": "Anatomy of the Variance Dampener",
+          "narrativeSentence": "Divide by the square root of projection dimension d_k",
+          "whyItExists": "When summing d_k random variables, their variance grows proportionally to d_k, pushing values into extreme ranges where softmax gradients vanish to zero.",
+          "parts": [
+            {
+              "id": "sub-dk",
+              "latexChunk": "d_k",
+              "plainPhrase": "feature dimension",
+              "technicalName": "Head Dimension Size (e.g. 64)",
+              "roleIntuition": "Number of channels in each attention head",
+              "paletteIndex": 4
+            },
+            {
+              "id": "sub-sqrt",
+              "latexChunk": "\\sqrt{\\dots}",
+              "plainPhrase": "standard deviation rate",
+              "technicalName": "Square Root Operation",
+              "roleIntuition": "Matches the natural standard deviation growth of vector dot products",
+              "paletteIndex": 3
+            }
+          ]
+        }
       },
       {
         "id": "c4",
@@ -158,7 +258,30 @@
         "plainPhrase": "convert similarity into probability weights",
         "technicalName": "Row-wise Softmax",
         "roleIntuition": "Normalized focus percentages",
-        "paletteIndex": 3
+        "paletteIndex": 3,
+        "subBreakdown": {
+          "label": "Anatomy of the Softmax Function",
+          "narrativeSentence": "Exponentiate scores to ensure positivity and divide by their sum",
+          "whyItExists": "Softmax transforms unconstrained similarity logits into a valid probability distribution where weights sum strictly to 1.0.",
+          "parts": [
+            {
+              "id": "sub-exp",
+              "latexChunk": "e^{z_i}",
+              "plainPhrase": "exponentiate scores",
+              "technicalName": "Exponential Numerator",
+              "roleIntuition": "Ensures all weights are positive and exaggerates top candidates",
+              "paletteIndex": 3
+            },
+            {
+              "id": "sub-denom",
+              "latexChunk": "\\sum e^{z_j}",
+              "plainPhrase": "total sum denominator",
+              "technicalName": "Normalizing Partition Function",
+              "roleIntuition": "Divides by total so all attention weights sum to 100%",
+              "paletteIndex": 0
+            }
+          ]
+        }
       },
       {
         "id": "c5",
@@ -387,6 +510,158 @@
       "concreteExample": "If layers 4, 5, 6 give token #42 attention weights 0.4, 0.5, 0.6, the centroid target is 0.5.",
       "plainDefinition": "An equivalent formulation proving that multi-layer training simply points the indexer toward the average attention pattern of all served layers.",
       "technicalDefinition": "The KL divergence between the arithmetic mean of target attention distributions and the predicted indexer distribution, yielding identical gradients to sum of individual KLs."
+    },
+    "source": "library"
+  },
+  {
+    "id": "single-layer-indexer-distillation",
+    "title": "Single-Layer Indexer Distillation (IndexCache / arXiv:2603.12201)",
+    "normalizedLatex": "\\mathcal{L}^{\\mathrm{I}} = \\sum_{t} D_{\\mathrm{KL}}\\!\\left(\\mathbf{p}^{(\\ell)}_{t}\\,\\big\\|\\,\\mathbf{q}^{(\\ell)}_{t}\\right)",
+    "colorizedLatex": "{\\color{#8B5CF6} \\mathcal{L}^{\\mathrm{I}}} = {\\color{#EC4899} \\sum_{t}} {\\color{#3B82F6} D_{\\mathrm{KL}}} \\! \\left( {\\color{#10B981} \\mathbf{p}^{(\\ell)}_{t}} \\, \\big\\| \\, {\\color{#F59E0B} \\mathbf{q}^{(\\ell)}_{t}} \\right)",
+    "narrativeSentence": "The indexer distillation penalty accumulates token-by-token divergence to train the student indexer to mirror the full teacher attention pattern.",
+    "components": [
+      {
+        "id": "c1",
+        "latexChunk": "\\mathcal{L}^{\\mathrm{I}}",
+        "plainPhrase": "The indexer distillation penalty",
+        "technicalName": "Indexer Objective Loss",
+        "roleIntuition": "The overall error penalizing indexer mistakes",
+        "paletteIndex": 0
+      },
+      {
+        "id": "c2",
+        "latexChunk": "\\sum_{t}",
+        "plainPhrase": "accumulates token-by-token",
+        "technicalName": "Sequence Token Sum",
+        "roleIntuition": "Tallies divergence across each token position in the sequence",
+        "paletteIndex": 5
+      },
+      {
+        "id": "c3",
+        "latexChunk": "D_{\\mathrm{KL}}",
+        "plainPhrase": "divergence",
+        "technicalName": "Kullback-Leibler Divergence",
+        "roleIntuition": "Measures statistical mismatch between teacher and student distributions",
+        "paletteIndex": 1
+      },
+      {
+        "id": "c4",
+        "latexChunk": "\\mathbf{p}^{(\\ell)}_{t}",
+        "plainPhrase": "to mirror the full teacher attention pattern",
+        "technicalName": "Full Attention Target (Teacher)",
+        "roleIntuition": "The true attention distribution calculated by the full self-attention layer",
+        "paletteIndex": 2
+      },
+      {
+        "id": "c5",
+        "latexChunk": "\\mathbf{q}^{(\\ell)}_{t}",
+        "plainPhrase": "to train the student indexer",
+        "technicalName": "Predicted Indexer Distribution (Student)",
+        "roleIntuition": "The lightweight indexer network's estimate of where attention should land",
+        "paletteIndex": 4
+      }
+    ],
+    "adept": {
+      "analogy": "A speed-reader (indexer) being coached by an exhaustive proofreader (full attention) until their reading selections match perfectly.",
+      "diagramConcept": "Two probability curves over tokens: student curve q is pulled toward teacher curve p until overlap is maximized.",
+      "concreteExample": "If token #12 receives 80% true attention, the student indexer is penalized if it only predicts 20%.",
+      "plainDefinition": "Trains a lightweight neural indexer to predict which tokens are important by copying the full attention distribution.",
+      "technicalDefinition": "Token-wise KL divergence between full multi-head attention weights and predicted index probabilities for layer ℓ."
+    },
+    "source": "library"
+  },
+  {
+    "id": "gated-ffn-reglu-swiglu",
+    "title": "Gated Feed-Forward Unit (SwiGLU / ReGLU / MoE Eq. 4)",
+    "normalizedLatex": "X_{\\text{out}} = \\left(\\sigma(X_{\\text{in}} W_{\\text{gate}} + b_{\\text{gate}}) \\odot \\text{ReLU}(X_{\\text{in}} W_{\\text{up}} + b_{\\text{up}})\\right) W_{\\text{down}}",
+    "colorizedLatex": "{\\color{#8B5CF6} X_{\\text{out}}} = \\left({\\color{#3B82F6} \\sigma(\\cdot)}{\\color{#10B981} (X_{\\text{in}} W_{\\text{gate}} + b_{\\text{gate}})} {\\color{#EF4444} \\odot} {\\color{#F59E0B} \\text{ReLU}(\\cdot)}{\\color{#EC4899} (X_{\\text{in}} W_{\\text{up}} + b_{\\text{up}})}\\right) {\\color{#8B5CF6} W_{\\text{down}}}",
+    "narrativeSentence": "The output token features dynamically gate feature flow with a linear controller, element-wise filtering the non-linear candidate activations before projecting back down.",
+    "components": [
+      {
+        "id": "c1",
+        "latexChunk": "X_{\\text{out}} =",
+        "plainPhrase": "The output token features",
+        "technicalName": "Output Representation",
+        "roleIntuition": "Updated hidden states sent to the residual stream",
+        "paletteIndex": 0
+      },
+      {
+        "id": "c2",
+        "latexChunk": "\\sigma(\\cdot)",
+        "plainPhrase": "dynamically gate feature flow",
+        "technicalName": "Sigmoid Gate Filter",
+        "roleIntuition": "Squashes gate values into [0, 1] to decide feature pass-through",
+        "paletteIndex": 1
+      },
+      {
+        "id": "c3",
+        "latexChunk": "X_{\\text{in}} W_{\\text{gate}} + b_{\\text{gate}}",
+        "plainPhrase": "with a linear controller",
+        "technicalName": "Linear Gate Projection",
+        "roleIntuition": "Computes which feature channels need to be admitted or suppressed",
+        "paletteIndex": 2,
+        "subBreakdown": {
+          "label": "Anatomy of the Linear Gate",
+          "whyItExists": "Standard MLPs process all activations uniformly. A separate gating projection creates a dynamic valve controlled by the input itself.",
+          "parts": [
+            {
+              "id": "sub-gate-w",
+              "latexChunk": "W_{\\text{gate}}",
+              "plainPhrase": "learned gate weights",
+              "technicalName": "Projection Matrix",
+              "roleIntuition": "Learned parameters that extract gating criteria from input embeddings",
+              "paletteIndex": 2
+            },
+            {
+              "id": "sub-gate-b",
+              "latexChunk": "b_{\\text{gate}}",
+              "plainPhrase": "gate bias",
+              "technicalName": "Bias Vector",
+              "roleIntuition": "Baseline default openness for each feature channel",
+              "paletteIndex": 1
+            }
+          ]
+        }
+      },
+      {
+        "id": "c4",
+        "latexChunk": "\\odot",
+        "plainPhrase": "element-wise filtering",
+        "technicalName": "Hadamard (Element-Wise) Product",
+        "roleIntuition": "Multiplies gate probabilities element-by-element with candidate features",
+        "paletteIndex": 3
+      },
+      {
+        "id": "c5",
+        "latexChunk": "\\text{ReLU}(\\cdot)",
+        "plainPhrase": "the non-linear",
+        "technicalName": "Rectified Linear Unit",
+        "roleIntuition": "Zeroes negative proposal signals to inject expressive non-linearity",
+        "paletteIndex": 4
+      },
+      {
+        "id": "c6",
+        "latexChunk": "X_{\\text{in}} W_{\\text{up}} + b_{\\text{up}}",
+        "plainPhrase": "candidate activations",
+        "technicalName": "Up-Projection Layer",
+        "roleIntuition": "Expands input into higher-dimensional hidden candidate space",
+        "paletteIndex": 5
+      },
+      {
+        "id": "c7",
+        "latexChunk": "W_{\\text{down}}",
+        "plainPhrase": "before projecting back down",
+        "technicalName": "Down-Projection Matrix",
+        "roleIntuition": "Compresses gated features back into the standard residual stream dimension",
+        "paletteIndex": 0
+      }
+    ],
+    "adept": {
+      "analogy": "A bouncer (gate) standing beside a chef (up-projection): the chef cooks up full dishes of candidate flavors, and the bouncer checks the guest list to decide exactly which dishes make it onto the dining table.",
+      "diagramConcept": "Dual parallel branches: input splits into Gate and Value branches. The Gate produces 0-to-1 dials that pointwise scale the Value branch before merging.",
+      "concreteExample": "In LLaMA 3 and MoE architectures, SwiGLU / ReGLU replaces standard FFNs, significantly reducing perplexity because irrelevant features can be shut off completely (multiplied by ~0).",
+      "plainDefinition": "A neural network layer that proposes new candidate thoughts with one branch while another branch acts as a dimmer switch controlling which thoughts actually pass through.",
+      "technicalDefinition": "A bilinear gated MLP unit where the hidden state is computed as the Hadamard product of a linear gate activation and a non-linear candidate feature projection, followed by a linear down-projection."
     },
     "source": "library"
   }

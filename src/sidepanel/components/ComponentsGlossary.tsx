@@ -1,7 +1,7 @@
 import React from 'react';
-import katex from 'katex';
 import { MathComponent, PaletteType } from '../../shared/types';
 import { getColor } from '../../shared/palettes';
+import { renderLatexSafe } from '../../shared/latex';
 
 interface ComponentsGlossaryProps {
   components: MathComponent[];
@@ -29,11 +29,7 @@ export const ComponentsGlossary: React.FC<ComponentsGlossaryProps> = ({
           const color = getColor(palette, comp.paletteIndex);
           const isHovered = hoveredChunkId === comp.id;
           const isDimmed = hoveredChunkId !== null && !isHovered;
-
-          let renderedLatex = comp.latexChunk;
-          try {
-            renderedLatex = katex.renderToString(comp.latexChunk, { throwOnError: false });
-          } catch {}
+          const renderedLatex = renderLatexSafe(comp.latexChunk);
 
           return (
             <div
