@@ -5,6 +5,7 @@ export const STORAGE_KEYS = {
   PALETTE: 'palette',
   SHOW_NUMBERED_BADGES: 'showNumberedBadges',
   AUTO_DETECT_ARXIV: 'autoDetectArxiv',
+  EQUATION_CACHE: 'chromamath_equation_cache',
 } as const;
 
 export const TIMEOUTS = {

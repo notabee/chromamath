@@ -1,43 +1,72 @@
 import { SnipCoordinates } from '../shared/types';
+import { ExtensionMessage } from '../shared/messages';
 
-chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
-  if (message.type === 'CROP_IMAGE') {
-    const { screenshotUrl, coords }: { screenshotUrl: string; coords: SnipCoordinates } = message;
+/**
+ * Offscreen Image Cropper service encapsulating canvas rendering and DPR scaling.
+ */
+export class ImageCropper {
+  private canvas: HTMLCanvasElement | null = null;
 
-    const img = new Image();
-    img.onload = () => {
-      try {
-        const canvas = document.getElementById('crop-canvas') as HTMLCanvasElement;
-        const dpr = coords.devicePixelRatio || 1;
-        
-        // Calculate scaled crop dimensions
-        const cropX = Math.round(coords.x * dpr);
-        const cropY = Math.round(coords.y * dpr);
-        const cropW = Math.round(coords.width * dpr);
-        const cropH = Math.round(coords.height * dpr);
-
-        canvas.width = cropW;
-        canvas.height = cropH;
-
-        const ctx = canvas.getContext('2d');
-        if (!ctx) {
-          sendResponse({ success: false, error: 'Failed to get canvas 2D context' });
-          return;
-        }
-
-        ctx.drawImage(img, cropX, cropY, cropW, cropH, 0, 0, cropW, cropH);
-        const croppedDataUrl = canvas.toDataURL('image/png');
-        sendResponse({ success: true, croppedDataUrl });
-      } catch (err: any) {
-        sendResponse({ success: false, error: err.message });
-      }
-    };
-
-    img.onerror = () => {
-      sendResponse({ success: false, error: 'Failed to load screenshot image in offscreen document' });
-    };
-
-    img.src = screenshotUrl;
-    return true; // async sendResponse
+  constructor(canvasId = 'crop-canvas') {
+    this.canvas = document.getElementById(canvasId) as HTMLCanvasElement;
   }
+
+  public crop(screenshotUrl: string, coords: SnipCoordinates): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+
+      img.onload = () => {
+        try {
+          if (!this.canvas) {
+            this.canvas = document.getElementById('crop-canvas') as HTMLCanvasElement;
+          }
+
+          if (!this.canvas) {
+            reject(new Error('Canvas element not found in offscreen document'));
+            return;
+          }
+
+          const dpr = coords.devicePixelRatio || 1;
+          const cropX = Math.round(coords.x * dpr);
+          const cropY = Math.round(coords.y * dpr);
+          const cropW = Math.round(coords.width * dpr);
+          const cropH = Math.round(coords.height * dpr);
+
+          this.canvas.width = cropW;
+          this.canvas.height = cropH;
+
+          const ctx = this.canvas.getContext('2d');
+          if (!ctx) {
+            reject(new Error('Failed to acquire canvas 2D context'));
+            return;
+          }
+
+          ctx.drawImage(img, cropX, cropY, cropW, cropH, 0, 0, cropW, cropH);
+          const croppedDataUrl = this.canvas.toDataURL('image/png');
+          resolve(croppedDataUrl);
+        } catch (err: any) {
+          reject(new Error(err?.message || 'Error executing canvas crop'));
+        }
+      };
+
+      img.onerror = () => {
+        reject(new Error('Failed to load screenshot image in offscreen document'));
+      };
+
+      img.src = screenshotUrl;
+    });
+  }
+}
+
+const cropper = new ImageCropper();
+
+chrome.runtime.onMessage.addListener((message: ExtensionMessage, _sender, sendResponse) => {
+  if (message.type === 'CROP_IMAGE') {
+    cropper
+      .crop(message.screenshotUrl, message.coords)
+      .then((croppedDataUrl) => sendResponse({ success: true, croppedDataUrl }))
+      .catch((err) => sendResponse({ success: false, error: err.message }));
+    return true; // Keep message channel open for async sendResponse
+  }
+  return false;
 });

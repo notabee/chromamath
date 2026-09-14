@@ -1,14 +1,18 @@
 import { useState, useEffect, useCallback } from 'react';
 import { ColorizedEquation, PaletteType } from '../../shared/types';
-import libraryEquations from '../../shared/library.json';
-import { sendExtensionMessage, ExplainResponse, GetEquationResponse } from '../../shared/messages';
+import {
+  sendExtensionMessage,
+  ExplainResponse,
+  GetEquationResponse,
+  DocumentHistoryResponse
+} from '../../shared/messages';
 import { exportToOverleafLatex, exportToMarkdown } from '../../shared/latex';
-import { DEFAULT_EQUATION_ID, TIMEOUTS } from '../../shared/constants';
+import { TIMEOUTS } from '../../shared/constants';
 
 export function useEquation(palette: PaletteType) {
-  const [equation, setEquation] = useState<ColorizedEquation>(
-    () => (libraryEquations.find(e => e.id === DEFAULT_EQUATION_ID) || libraryEquations[0]) as ColorizedEquation
-  );
+  const [equation, setEquation] = useState<ColorizedEquation | null>(null);
+  const [documentHistory, setDocumentHistory] = useState<ColorizedEquation[]>([]);
+  const [activeDocId, setActiveDocId] = useState<string>('global');
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [copyStatus, setCopyStatus] = useState<'latex' | 'markdown' | null>(null);
@@ -21,14 +25,44 @@ export function useEquation(palette: PaletteType) {
         if (res?.equation) {
           setEquation(res.equation);
         }
+        if (res?.docId) {
+          setActiveDocId(res.docId);
+        }
+      })
+      .catch(() => {});
+
+    sendExtensionMessage<DocumentHistoryResponse>({ type: 'GET_DOCUMENT_HISTORY' })
+      .then((res) => {
+        if (res?.equations) {
+          setDocumentHistory(res.equations);
+        }
+        if (res?.docId) {
+          setActiveDocId(res.docId);
+        }
       })
       .catch(() => {});
 
     const handleMessage = (message: any) => {
-      if (message.type === 'EQUATION_UPDATED' && message.equation) {
-        setEquation(message.equation);
+      if (message.type === 'DECONSTRUCTION_STARTED') {
+        setIsLoading(true);
+        setErrorMessage(null);
+      } else if (message.type === 'EQUATION_UPDATED') {
+        setEquation(message.equation || null);
+        if (message.docId) {
+          setActiveDocId(message.docId);
+        }
         setIsLoading(false);
         setErrorMessage(null);
+      } else if (message.type === 'DOCUMENT_HISTORY_UPDATED') {
+        if (message.equations) {
+          setDocumentHistory(message.equations);
+        }
+        if (message.docId) {
+          setActiveDocId(message.docId);
+        }
+      } else if (message.type === 'DECONSTRUCTION_ERROR') {
+        setIsLoading(false);
+        setErrorMessage(message.error || 'Deconstruction failed.');
       }
     };
 
@@ -45,7 +79,7 @@ export function useEquation(palette: PaletteType) {
 
     try {
       const response = await sendExtensionMessage<ExplainResponse>(
-        { type: 'EXPLAIN_LATEX', latex },
+        { type: 'EXPLAIN_LATEX', latex, docId: activeDocId },
         TIMEOUTS.CLIENT_TIMEOUT_MS
       );
 
@@ -60,7 +94,25 @@ export function useEquation(palette: PaletteType) {
       setIsLoading(false);
       setErrorMessage(err?.message || 'Failed to communicate with extension background.');
     }
-  }, []);
+  }, [activeDocId]);
+
+  const selectHistoryEquation = useCallback((selectedEq: ColorizedEquation) => {
+    setEquation(selectedEq);
+    sendExtensionMessage({
+      type: 'SELECT_CACHED_EQUATION',
+      equationId: selectedEq.id,
+      docId: activeDocId
+    }).catch(() => {});
+  }, [activeDocId]);
+
+  const clearDocumentHistory = useCallback(() => {
+    setDocumentHistory([]);
+    setEquation(null);
+    sendExtensionMessage({
+      type: 'CLEAR_DOCUMENT_CACHE',
+      docId: activeDocId
+    }).catch(() => {});
+  }, [activeDocId]);
 
   const copyLatex = useCallback(async () => {
     if (!equation) return;
@@ -84,14 +136,19 @@ export function useEquation(palette: PaletteType) {
 
   return {
     equation,
+    documentHistory,
+    activeDocId,
     isLoading,
     errorMessage,
     copyStatus,
     lastFailedLatex,
     setEquation,
     explainLatex,
+    selectHistoryEquation,
+    clearDocumentHistory,
     copyLatex,
     copyMarkdown,
     clearError,
   };
 }
+

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Header } from './components/Header';
 import { QuickActions } from './components/QuickActions';
+import { DocumentHistoryBar } from './components/DocumentHistoryBar';
 import { ApiKeyNotice } from './components/ApiKeyNotice';
 import { InteractiveEquation } from './components/InteractiveEquation';
 import { NarrativeSentence } from './components/NarrativeSentence';
@@ -17,12 +18,16 @@ export default function App() {
   const { palette, showNumberedBadges, cyclePalette, toggleBadges } = useSettings();
   const {
     equation,
+    documentHistory,
+    activeDocId,
     isLoading,
     errorMessage,
     copyStatus,
     lastFailedLatex,
     setEquation,
     explainLatex,
+    selectHistoryEquation,
+    clearDocumentHistory,
     copyLatex,
     copyMarkdown,
     clearError,
@@ -68,6 +73,17 @@ export default function App() {
           onOpenLibrary={() => setIsLibraryOpen(true)}
         />
 
+        {/* Document Session History Bar */}
+        {documentHistory.length > 0 && (
+          <DocumentHistoryBar
+            history={documentHistory}
+            activeEquationId={equation?.id}
+            docId={activeDocId}
+            onSelectEquation={selectHistoryEquation}
+            onClearHistory={clearDocumentHistory}
+          />
+        )}
+
         {/* API Key Setup Banner */}
         {isApiKeyMissing && <ApiKeyNotice onSaved={handleApiKeySaved} />}
 
@@ -84,6 +100,27 @@ export default function App() {
           <div className="p-8 bg-white border-2 border-dotted border-neutral-300 rounded-2xl flex flex-col items-center justify-center gap-3 text-neutral-700 shadow-sm">
             <Loader2 className="w-6 h-6 animate-spin text-black" />
             <span className="text-xs font-semibold">Deconstructing formula with Gemini 2.0 Flash...</span>
+          </div>
+        )}
+
+        {/* Ready to Deconstruct - Empty State */}
+        {!equation && !isLoading && !errorMessage && !isApiKeyMissing && (
+          <div className="p-8 bg-white border-2 border-dotted border-neutral-300 rounded-2xl flex flex-col items-center justify-center text-center gap-3 text-neutral-700 shadow-sm">
+            <div className="w-10 h-10 rounded-full bg-neutral-100 border border-dotted border-neutral-400 flex items-center justify-center text-neutral-700 text-sm font-serif font-bold">
+              fx
+            </div>
+            <div className="space-y-1">
+              <h3 className="text-sm font-bold text-neutral-900">Ready to Deconstruct</h3>
+              <p className="text-xs text-neutral-500 max-w-xs leading-relaxed">
+                Hover over any equation on arXiv or Wikipedia and click <strong>Explain</strong>, or use the quick actions above.
+              </p>
+            </div>
+            <button
+              onClick={() => setIsLibraryOpen(true)}
+              className="mt-1 px-3 py-1.5 bg-neutral-50 hover:bg-neutral-100 border border-dotted border-neutral-300 hover:border-black rounded-xl text-xs font-semibold text-neutral-800 transition-colors"
+            >
+              Browse Example Library →
+            </button>
           </div>
         )}
 
