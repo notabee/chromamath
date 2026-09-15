@@ -1,6 +1,7 @@
 {
   "name": "chromamath",
   "version": "1.0.0",
+  "license": "MIT",
   "description": "Intuitive, color-coordinated mathematical equation explainer for arXiv papers and PDFs",
   "type": "module",
   "scripts": {
