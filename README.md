@@ -18,7 +18,11 @@
 </p>
 
 <p align="center">
-  <img src="assets/preview.png" width="820" alt="ChromaMath Interactive Side Panel UI Preview" />
+  <a href="https://www.youtube.com/watch?v=EZisoGojics" target="_blank">
+    <img src="https://img.youtube.com/vi/EZisoGojics/maxresdefault.jpg" alt="Watch ChromaMath Demo" width="390" />
+  </a>
+  <br />
+  <em>▶️ Click above to watch the ChromaMath demo on YouTube</em>
 </p>
 
 ---
